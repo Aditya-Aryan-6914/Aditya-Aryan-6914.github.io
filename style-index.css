@@ -1,4 +1,7 @@
-.centreh1{
-  text-align: centre;
-  
+h1{
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    text-align: center;
+    padding: 50px;
 }
