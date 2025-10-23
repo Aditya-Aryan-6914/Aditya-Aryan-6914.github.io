@@ -50,5 +50,9 @@ async function loadHeader(url, targetElementId) {
 // Use a relative path (no leading slash) so the loader works on GitHub Pages project pages.
 // Call after DOM is ready to ensure the placeholder element exists.
 document.addEventListener('DOMContentLoaded', () => {
-    loadHeader('header.html', 'header-placeholder');
+    // Choose header path relative to the current page so this works from / and /pages/*
+    const pathname = window.location.pathname;
+    // If the page is inside the /pages/ folder, the header is one level up
+    const headerPath = pathname.includes('/pages/') ? '../header.html' : 'header.html';
+    loadHeader(headerPath, 'header-placeholder');
 });
