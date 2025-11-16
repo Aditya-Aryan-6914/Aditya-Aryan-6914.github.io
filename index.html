@@ -7,20 +7,15 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <header class="site-header">
+    <!-- Top banner appears when a section is opened; clicking it returns home -->
+    <div id="topBanner" class="top-banner" aria-hidden="true">
       <div class="container">
-        <a class="logo" href="/">Aditya Aryan</a>
-        <nav class="site-nav" aria-label="Main navigation">
-          <a href="/">Home</a>
-          <a href="about.html">About</a>
-          <a href="projects.html">Projects</a>
-          <a href="gallery.html">Gallery</a>
-          <a href="achievements.html">Achievements</a>
-        </nav>
+        <a id="bannerLogo" class="banner-logo" href="#">Aditya Aryan</a>
+        <div id="bannerTitle" class="banner-title"></div>
       </div>
-    </header>
+    </div>
 
-    <main class="center page-home">
+    <main class="center page-home" id="hero">
       <h1 class="name">Hi, I am Aditya Aryan</h1>
       <h2 class="role">I am <span id="role">Student</span><span class="cursor">|</span></h2>
 
@@ -49,7 +44,81 @@
           </svg>
         </a>
       </div>
+
+      <!-- Bottom inline navigation for sections -->
+      <nav class="bottom-nav" aria-label="Sections">
+        <a href="#about" data-section="about">About Me</a>
+        <a href="#projects" data-section="projects">Projects</a>
+        <a href="#gallery" data-section="gallery">Gallery</a>
+        <a href="#achievements" data-section="achievements">Achievements</a>
+      </nav>
     </main>
+
+    <!-- Page sections (single-page behavior) -->
+    <section id="about" class="content-section">
+      <div class="container">
+        <h2>About Me</h2>
+        <p>Hello — I'm Aditya Aryan. This page is a short place to write about you: background, interests, studies, and what you're exploring. Replace this placeholder with your real bio.</p>
+
+        <h3>Quick Facts</h3>
+        <ul>
+          <li>Location: Your city</li>
+          <li>Study: Your school/college</li>
+          <li>Interests: Coding, design, exploration</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="projects" class="content-section">
+      <div class="container">
+        <h2>Active Projects</h2>
+        <p>Below are some projects I'm actively working on. Replace these placeholders with real project links and descriptions.</p>
+
+        <div class="projects-grid">
+          <article class="project">
+            <h3>Project One</h3>
+            <p>Short description of project one and what it does.</p>
+          </article>
+
+          <article class="project">
+            <h3>Project Two</h3>
+            <p>Short description of project two and what it does.</p>
+          </article>
+
+          <article class="project">
+            <h3>Project Three</h3>
+            <p>Short description of project three and what it does.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="content-section">
+      <div class="container">
+        <h2>Photo Gallery</h2>
+        <p>Place your photos in the `Images/` folder and reference them here. Example placeholders below.</p>
+
+        <div class="gallery-grid">
+          <img src="Images/photo1.jpg" alt="Photo 1 placeholder">
+          <img src="Images/photo2.jpg" alt="Photo 2 placeholder">
+          <img src="Images/photo3.jpg" alt="Photo 3 placeholder">
+        </div>
+      </div>
+    </section>
+
+    <section id="achievements" class="content-section">
+      <div class="container">
+        <h2>Achievements</h2>
+        <p>List your awards, certificates, or milestones here. Replace these examples with your real achievements.</p>
+
+        <ul class="achievements-list">
+          <li>Achievement One — Short description or date</li>
+          <li>Achievement Two — Short description or date</li>
+          <li>Achievement Three — Short description or date</li>
+        </ul>
+      </div>
+    </section>
+
     <script src="script.js" defer></script>
   </body>
 </html>

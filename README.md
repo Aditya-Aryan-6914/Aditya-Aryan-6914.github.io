@@ -45,5 +45,12 @@ New pages
 Navigation
 - A top navigation bar was added to `index.html` and to each new page; change links or order in those files.
 
+Single-page behavior
+- The site now uses a single-page layout: the home hero stays as the main view.
+- At the bottom of the home page there are inline section links: About Me, Projects, Gallery, Achievements.
+- Clicking any section link scrolls the page to the top, shrinks the hero into a small banner, and fades in the selected section below.
+- Click the banner (your name) or press `Esc` to return to the original home hero view.
+
+
 
 

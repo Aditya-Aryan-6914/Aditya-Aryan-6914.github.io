@@ -48,3 +48,62 @@ function typeLoop() {
 }
 
 // Note: To edit words or speeds, change the `roles` array and the speed constants above.
+
+// Single-page navigation: collapse hero into a small banner and show sections
+const links = document.querySelectorAll('.bottom-nav a[data-section]');
+const topBanner = document.getElementById('topBanner');
+const bannerTitle = document.getElementById('bannerTitle');
+const hero = document.getElementById('hero');
+const sections = document.querySelectorAll('.content-section');
+
+function showSection(name){
+  // scroll to top smoothly, then show section and collapse hero
+  window.scrollTo({top:0, behavior:'smooth'});
+
+  // small delay to allow scroll to start before visual changes
+  setTimeout(()=>{
+    hero.classList.add('collapsed');
+    topBanner.classList.add('show');
+    topBanner.setAttribute('aria-hidden','false');
+    bannerTitle.textContent = name.replace(/^[a-z]/, s=>s.toUpperCase());
+
+    sections.forEach(s=>{
+      if(s.id === name){
+        s.classList.add('active');
+        s.setAttribute('tabindex','-1');
+        s.focus && s.focus();
+      } else {
+        s.classList.remove('active');
+      }
+    });
+  }, 260);
+}
+
+function hideSections(){
+  hero.classList.remove('collapsed');
+  topBanner.classList.remove('show');
+  topBanner.setAttribute('aria-hidden','true');
+  bannerTitle.textContent = '';
+  sections.forEach(s => s.classList.remove('active'));
+}
+
+// wire up bottom links
+links.forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const target = a.dataset.section;
+    showSection(target);
+  });
+});
+
+// clicking the banner logo or banner area returns home
+document.getElementById('bannerLogo').addEventListener('click', (e)=>{
+  e.preventDefault();
+  hideSections();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+// If user clicks outside (press Escape) close sections
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') hideSections();
+});

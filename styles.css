@@ -55,6 +55,41 @@ body{
 .gallery-grid img{width:100%; height:160px; object-fit:cover; border-radius:8px}
 
 .achievements-list{list-style:disc inside}
+
+/* Top banner shown when a section is active */
+.top-banner{
+  position:fixed;
+  left:0;
+  right:0;
+  top:0;
+  background:rgba(255,255,255,0.96);
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  transform:translateY(-100%);
+  transition:transform 280ms ease;
+  z-index:40;
+}
+.top-banner.show{transform:translateY(0)}
+.top-banner .container{display:flex;align-items:center;justify-content:space-between;padding:0.5rem 1rem}
+.banner-logo{font-weight:700;color:var(--text);text-decoration:none}
+.banner-title{color:var(--muted);font-weight:600}
+
+/* Hero collapse (shrink to small banner effect) */
+#hero{transition:padding-top 280ms ease}
+#hero.collapsed{padding-top:3.5rem}
+#hero.collapsed .name{font-size:1rem; transform:translateY(-2px); margin:0}
+#hero.collapsed .role{font-size:0.875rem; color:var(--muted); margin-top:0}
+
+/* Bottom inline nav */
+.bottom-nav{margin-top:1.4rem; display:flex; gap:0.75rem; justify-content:center}
+.bottom-nav a{padding:0.5rem 0.9rem; border-radius:999px; background:rgba(17,24,39,0.04); color:var(--text); text-decoration:none; font-weight:600}
+.bottom-nav a:hover{background:rgba(14,165,164,0.12); color:var(--accent)}
+
+/* Content sections (hidden by default, fade in when active) */
+.content-section{opacity:0; transform:translateY(10px); transition:opacity 320ms ease, transform 320ms ease; max-width:960px; margin:1.25rem auto; padding:0 1rem; display:none}
+.content-section.active{display:block; opacity:1; transform:translateY(0)}
+
+/* Make sure hero remains visually centered on home */
+.page-home{min-height:72vh}
 .name{
   margin:0;
   font-weight:700;
