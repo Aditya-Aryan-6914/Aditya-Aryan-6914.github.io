@@ -124,10 +124,19 @@ document.getElementById('bannerLogo').addEventListener('click', (e)=>{
 });
 
 // auto-collapse (return to hero) when user scrolls back near the top
+// Only collapse when user is scrolling upward and reaches near the top
+let lastScrollY = window.scrollY || 0;
+const scrollUpDeltaRequired = 10; // require at least this many px of upward scroll
+
 window.addEventListener('scroll', ()=>{
-  if(sectionOpen && window.scrollY < scrollThreshold){
+  const currentY = window.scrollY || 0;
+  const delta = currentY - lastScrollY; // negative when scrolling up
+
+  if (sectionOpen && currentY < scrollThreshold && delta < -scrollUpDeltaRequired) {
     hideSections();
   }
+
+  lastScrollY = currentY;
 });
 
 // If user clicks outside (press Escape) close sections
