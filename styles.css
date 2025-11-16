@@ -151,6 +151,11 @@ body{
 }
 #role.hidden{opacity:0}
 
+/* Quote styling */
+.quote-section{margin-bottom:1rem}
+.quote{border-left:4px solid var(--accent); padding-left:1rem; color:var(--muted); font-style:italic;}
+#role.hidden{opacity:0}
+
 /* Social links */
 .social{
   margin-top:1.25rem;
