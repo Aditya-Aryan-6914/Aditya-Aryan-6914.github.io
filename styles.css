@@ -22,6 +22,39 @@ body{
   text-align:center;
   padding:2rem;
 }
+
+/* Header / Navigation */
+.site-header{
+  width:100%;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  background:var(--bg);
+}
+.site-header .container{
+  max-width:960px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0.75rem 1rem;
+}
+.logo{font-weight:700; color:var(--text); text-decoration:none}
+.site-nav a{margin-left:1rem; color:var(--muted); text-decoration:none; font-weight:500}
+.site-nav a:hover, .site-nav a[aria-current="page"]{color:var(--text)}
+
+/* Container used on pages */
+.container{padding:2rem; max-width:960px; margin:0 auto}
+
+/* Page spacing adjustments so header doesn't overlap */
+.page-home{padding-top:4.5rem}
+.page-about, .page-projects, .page-gallery, .page-achievements{padding-top:2.5rem}
+
+/* Projects and gallery layouts */
+.projects-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem}
+.project{padding:1rem; border-radius:8px; background:rgba(0,0,0,0.03)}
+.gallery-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:0.75rem}
+.gallery-grid img{width:100%; height:160px; object-fit:cover; border-radius:8px}
+
+.achievements-list{list-style:disc inside}
 .name{
   margin:0;
   font-weight:700;

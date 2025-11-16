@@ -36,4 +36,14 @@ Typing animation
 	- `pauseAfterTyping` — ms pause after a full word is typed.
 	- `pauseAfterDeleting` — ms pause after a word is deleted before typing next.
 
+New pages
+- `about.html` — your about/bio page.
+- `projects.html` — active projects and links.
+- `gallery.html` — photo gallery that reads images from the `Images/` folder.
+- `achievements.html` — awards and milestones.
+
+Navigation
+- A top navigation bar was added to `index.html` and to each new page; change links or order in those files.
+
+
 
