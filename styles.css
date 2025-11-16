@@ -73,19 +73,23 @@ body{
 .banner-logo{font-weight:700;color:var(--text);text-decoration:none}
 .banner-title{color:var(--muted);font-weight:600}
 
-/* Back button in banner */
-.banner-back{
-  background:transparent;
-  border:0;
-  color:var(--muted);
-  font-weight:600;
-  font-size:0.95rem;
-  padding:0.25rem 0.5rem;
-  border-radius:6px;
-  cursor:pointer;
+/* Responsive tweaks for hero and navigation */
+@media (min-width:1024px){
+  .name{font-size:clamp(3rem,6vw,6rem)}
+  .page-home{min-height:68vh}
+  .container{max-width:1100px}
 }
-.banner-back:hover{color:var(--text); background:rgba(0,0,0,0.03)}
-.banner-back:focus{outline:3px solid rgba(14,165,164,0.18); outline-offset:3px}
+
+@media (max-width:420px){
+  .bottom-nav a{padding:0.75rem 1rem; font-size:0.95rem}
+  .banner-title{font-size:0.9rem}
+  .top-banner .container{padding:0.4rem 0.75rem}
+  .gallery-grid img{height:120px}
+}
+
+@media (max-width:320px){
+  .name{font-size:2rem}
+}
 
 /* Hero collapse (shrink to small banner effect) */
 #hero{transition:padding-top 280ms ease}

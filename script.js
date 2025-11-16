@@ -55,8 +55,9 @@ const topBanner = document.getElementById('topBanner');
 const bannerTitle = document.getElementById('bannerTitle');
 const hero = document.getElementById('hero');
 const sections = document.querySelectorAll('.content-section');
-const bannerBack = document.getElementById('bannerBack');
 const heroHeading = document.querySelector('.name');
+let sectionOpen = false;
+const scrollThreshold = 120; // when near the top, auto-collapse sections
 
 function showSection(name){
   // scroll to top smoothly, then show section and collapse hero
@@ -80,6 +81,7 @@ function showSection(name){
         s.classList.remove('active');
       }
     });
+    sectionOpen = true;
   }, 260);
 }
 
@@ -89,6 +91,7 @@ function hideSections(){
   topBanner.setAttribute('aria-hidden','true');
   bannerTitle.textContent = '';
   sections.forEach(s => s.classList.remove('active'));
+  sectionOpen = false;
 }
 
 // wire up bottom links
@@ -105,23 +108,21 @@ document.getElementById('bannerLogo').addEventListener('click', (e)=>{
   e.preventDefault();
   hideSections();
   window.scrollTo({top:0, behavior:'smooth'});
+  // return focus to the hero heading after animation
+  setTimeout(()=>{
+    if(heroHeading){
+      heroHeading.setAttribute('tabindex','-1');
+      heroHeading.focus();
+    }
+  }, 320);
 });
 
-// Back button in banner: return to hero and restore focus
-if(bannerBack){
-  bannerBack.addEventListener('click', (e)=>{
-    e.preventDefault();
+// auto-collapse (return to hero) when user scrolls back near the top
+window.addEventListener('scroll', ()=>{
+  if(sectionOpen && window.scrollY < scrollThreshold){
     hideSections();
-    window.scrollTo({top:0, behavior:'smooth'});
-    // return focus to the hero heading
-    setTimeout(()=>{
-      if(heroHeading){
-        heroHeading.setAttribute('tabindex','-1');
-        heroHeading.focus();
-      }
-    }, 320);
-  });
-}
+  }
+});
 
 // If user clicks outside (press Escape) close sections
 document.addEventListener('keydown', (e)=>{
