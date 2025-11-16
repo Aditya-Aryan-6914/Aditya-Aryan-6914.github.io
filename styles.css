@@ -81,7 +81,8 @@ body{
 }
 
 @media (max-width:420px){
-  .bottom-nav a{padding:0.75rem 1rem; font-size:0.95rem}
+  .bottom-nav{gap:0.5rem; flex-wrap:wrap}
+  .bottom-nav a{padding:0.75rem 1rem; font-size:0.95rem; flex:1 1 calc(50% - 0.5rem); min-width:120px; text-align:center}
   .banner-title{font-size:0.9rem}
   .top-banner .container{padding:0.4rem 0.75rem}
   .gallery-grid img{height:120px}
@@ -108,6 +109,20 @@ body{
 
 /* Make sure hero remains visually centered on home */
 .page-home{min-height:72vh}
+/* Theme palettes for sections - these change the page feel when a section is active */
+:root{--page-bg:transparent; --page-text:var(--text); --page-muted:var(--muted)}
+.theme-about{--page-bg:#f0fdfa; --page-text:#054f4f; --page-muted:#0f766e; --accent:#0ea5a4}
+.theme-projects{--page-bg:#f8fafc; --page-text:#0f172a; --page-muted:#475569; --accent:#2563eb}
+.theme-gallery{--page-bg:#fff7ed; --page-text:#7c2d12; --page-muted:#92400e; --accent:#f97316}
+.theme-achievements{--page-bg:#f8fafc; --page-text:#0b1220; --page-muted:#334155; --accent:#7c3aed}
+
+/* Apply theme variables to active content and banner */
+.content-section.active{background:var(--page-bg); color:var(--page-text)}
+.top-banner.show{background:var(--page-bg)}
+.top-banner .banner-title{color:var(--accent)}
+
+/* Ensure links inside themed pages use accent */
+.content-section.active a{color:var(--accent)}
 .name{
   margin:0;
   font-weight:700;

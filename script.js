@@ -70,6 +70,10 @@ function showSection(name){
     topBanner.setAttribute('aria-hidden','false');
     bannerTitle.textContent = name.replace(/^[a-z]/, s=>s.toUpperCase());
 
+    // set page theme class on body (remove other theme- classes first)
+    document.body.className = document.body.className.replace(/\btheme-[^\s]+\b/g, '').trim();
+    document.body.classList.add(`theme-${name}`);
+
     sections.forEach(s=>{
       if(s.id === name){
         s.classList.add('active');
@@ -92,6 +96,8 @@ function hideSections(){
   bannerTitle.textContent = '';
   sections.forEach(s => s.classList.remove('active'));
   sectionOpen = false;
+  // remove any theme class on body
+  document.body.className = document.body.className.replace(/\btheme-[^\s]+\b/g, '').trim();
 }
 
 // wire up bottom links
