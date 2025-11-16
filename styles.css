@@ -156,6 +156,20 @@ body{
 .quote{border-left:4px solid var(--accent); padding-left:1rem; color:var(--muted); font-style:italic;}
 #role.hidden{opacity:0}
 
+/* Site logo in banner */
+.site-logo{height:28px; display:inline-block; vertical-align:middle}
+
+/* About grid: photo + content */
+.about-grid{display:grid;grid-template-columns:140px 1fr;gap:1rem;align-items:start}
+.about-photo{display:flex;align-items:flex-start;justify-content:center}
+.profile-photo{width:140px;height:140px;border-radius:50%;object-fit:cover;border:4px solid rgba(0,0,0,0.06);box-shadow:0 6px 20px rgba(2,6,23,0.08)}
+
+@media (max-width:720px){
+  .about-grid{grid-template-columns:1fr; text-align:left}
+  .about-photo{justify-content:flex-start}
+  .profile-photo{width:110px;height:110px}
+}
+
 /* Social links */
 .social{
   margin-top:1.25rem;
