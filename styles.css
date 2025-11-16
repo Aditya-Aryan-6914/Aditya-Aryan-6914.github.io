@@ -95,6 +95,12 @@ body{
   .name{font-size:2rem}
 }
 
+/* One-time section hint */
+.section-hint{position:fixed;left:50%;top:64px;transform:translateX(-50%) translateY(-8px);background:rgba(0,0,0,0.8);color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,0.12);opacity:0;pointer-events:none;transition:opacity 220ms ease,transform 220ms ease;z-index:70;max-width:min(92%,520px);display:flex;align-items:center;gap:10px;font-size:0.95rem}
+.section-hint.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.section-hint .section-hint-close{background:transparent;border:0;color:inherit;font-weight:700;cursor:pointer;padding:0 6px;font-size:1rem}
+@media (max-width:420px){.section-hint{top:56px;padding:9px 12px;font-size:0.9rem}}
+
 /* Hero collapse (shrink to small banner effect) */
 #hero{transition:padding-top 280ms ease}
 #hero.collapsed{padding-top:3.5rem}

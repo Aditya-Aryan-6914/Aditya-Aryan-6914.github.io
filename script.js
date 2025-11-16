@@ -89,6 +89,10 @@ function showSection(name){
   }, 260);
 }
 
+  // show a one-time hint explaining how to return (if not seen before)
+  showHintOnce();
+
+
 function hideSections(){
   hero.classList.remove('collapsed');
   topBanner.classList.remove('show');
@@ -138,6 +142,46 @@ window.addEventListener('scroll', ()=>{
 
   lastScrollY = currentY;
 });
+
+// One-time on-screen hint for how to return home from a section
+const hintKey = 'seenSectionHint_v1';
+let hintTimeout;
+function createHint(){
+  if(document.getElementById('sectionHint')) return;
+  const el = document.createElement('div');
+  el.id = 'sectionHint';
+  el.className = 'section-hint';
+  el.setAttribute('role','status');
+  el.setAttribute('aria-live','polite');
+  el.tabIndex = 0;
+  el.innerHTML = 'Tip: Scroll up to the top and swipe up to return to the hero. <button class="section-hint-close" aria-label="Dismiss hint">✕</button>';
+  document.body.appendChild(el);
+  el.querySelector('.section-hint-close').addEventListener('click', hideHint);
+  el.addEventListener('click', hideHint);
+}
+
+function showHintOnce(){
+  try{
+    if(localStorage.getItem(hintKey)) return;
+    createHint();
+    const el = document.getElementById('sectionHint');
+    if(!el) return;
+    // show and then hide after a short period
+    setTimeout(()=> el.classList.add('show'), 60);
+    el.focus();
+    localStorage.setItem(hintKey,'1');
+    hintTimeout = setTimeout(hideHint, 5000);
+  }catch(e){
+    // localStorage may be unavailable in some contexts — ignore
+  }
+}
+
+function hideHint(){
+  const el = document.getElementById('sectionHint');
+  if(!el) return;
+  el.classList.remove('show');
+  clearTimeout(hintTimeout);
+}
 
 // If user clicks outside (press Escape) close sections
 document.addEventListener('keydown', (e)=>{
