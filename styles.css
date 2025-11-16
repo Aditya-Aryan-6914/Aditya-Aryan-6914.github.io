@@ -73,6 +73,20 @@ body{
 .banner-logo{font-weight:700;color:var(--text);text-decoration:none}
 .banner-title{color:var(--muted);font-weight:600}
 
+/* Back button in banner */
+.banner-back{
+  background:transparent;
+  border:0;
+  color:var(--muted);
+  font-weight:600;
+  font-size:0.95rem;
+  padding:0.25rem 0.5rem;
+  border-radius:6px;
+  cursor:pointer;
+}
+.banner-back:hover{color:var(--text); background:rgba(0,0,0,0.03)}
+.banner-back:focus{outline:3px solid rgba(14,165,164,0.18); outline-offset:3px}
+
 /* Hero collapse (shrink to small banner effect) */
 #hero{transition:padding-top 280ms ease}
 #hero.collapsed{padding-top:3.5rem}

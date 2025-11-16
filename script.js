@@ -55,6 +55,8 @@ const topBanner = document.getElementById('topBanner');
 const bannerTitle = document.getElementById('bannerTitle');
 const hero = document.getElementById('hero');
 const sections = document.querySelectorAll('.content-section');
+const bannerBack = document.getElementById('bannerBack');
+const heroHeading = document.querySelector('.name');
 
 function showSection(name){
   // scroll to top smoothly, then show section and collapse hero
@@ -70,8 +72,10 @@ function showSection(name){
     sections.forEach(s=>{
       if(s.id === name){
         s.classList.add('active');
-        s.setAttribute('tabindex','-1');
-        s.focus && s.focus();
+        // move keyboard focus to the section heading for accessibility
+        const heading = s.querySelector('h2') || s;
+        heading.setAttribute('tabindex','-1');
+        heading.focus();
       } else {
         s.classList.remove('active');
       }
@@ -102,6 +106,22 @@ document.getElementById('bannerLogo').addEventListener('click', (e)=>{
   hideSections();
   window.scrollTo({top:0, behavior:'smooth'});
 });
+
+// Back button in banner: return to hero and restore focus
+if(bannerBack){
+  bannerBack.addEventListener('click', (e)=>{
+    e.preventDefault();
+    hideSections();
+    window.scrollTo({top:0, behavior:'smooth'});
+    // return focus to the hero heading
+    setTimeout(()=>{
+      if(heroHeading){
+        heroHeading.setAttribute('tabindex','-1');
+        heroHeading.focus();
+      }
+    }, 320);
+  });
+}
 
 // If user clicks outside (press Escape) close sections
 document.addEventListener('keydown', (e)=>{
