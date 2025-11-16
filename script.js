@@ -134,3 +134,36 @@ window.addEventListener('scroll', ()=>{
 document.addEventListener('keydown', (e)=>{
   if(e.key === 'Escape') hideSections();
 });
+
+// Populate gallery from Images/gallery.json if present
+function populateGallery(){
+  const grid = document.getElementById('galleryGrid');
+  if(!grid) return;
+  fetch('Images/gallery.json').then(res=>{
+    if(!res.ok) throw new Error('no manifest');
+    return res.json();
+  }).then(items=>{
+    grid.innerHTML = '';
+    if(!items.length){
+      grid.innerHTML = '<p class="muted">No images found.</p>';
+      return;
+    }
+    items.forEach(it=>{
+      const a = document.createElement('a');
+      a.href = it.src;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      const img = document.createElement('img');
+      img.src = it.thumb || it.src;
+      img.alt = it.alt || '';
+      img.loading = 'lazy';
+      a.appendChild(img);
+      grid.appendChild(a);
+    });
+  }).catch(()=>{
+    // manifest missing - keep fallback message
+  });
+}
+
+// call populate on load
+window.addEventListener('load', populateGallery);

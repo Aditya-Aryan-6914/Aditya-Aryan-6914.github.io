@@ -115,10 +115,9 @@
         <h2>Photo Gallery</h2>
         <p>Place your photos in the `Images/` folder and reference them here. Example placeholders below.</p>
 
-        <div class="gallery-grid">
-          <img src="Images/photo1.jpg" alt="Photo 1 placeholder">
-          <img src="Images/photo2.jpg" alt="Photo 2 placeholder">
-          <img src="Images/photo3.jpg" alt="Photo 3 placeholder">
+        <div id="galleryGrid" class="gallery-grid" aria-live="polite">
+          <!-- Gallery images will be populated from `Images/gallery.json` by script.js -->
+          <p class="muted">No images found. Run <code>python3 tools/generate_gallery.py</code> to generate thumbnails from `Images/`.</p>
         </div>
       </div>
     </section>
