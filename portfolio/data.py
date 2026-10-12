@@ -33,7 +33,7 @@ PROFILE = {
         "linkedin": "https://www.linkedin.com/in/aditya-aryan6914/",               # e.g. "https://www.linkedin.com/in/your-handle/"
         "website": "https://adityaaryan.me",
     },
-    "resume_pdf": "files/Aditya_Aryan_Resume.pdf",   # put the PDF in static/files/ to enable the button
+    "resume_pdf": "files/Aditya_Aryan_s_resume.pdf",   # PDF lives in static/files/ (button appears automatically)
     "interests": ["Open Source", "Cloud-Native & DevOps", "Cybersecurity", "AI / ML"],
     "about": [
         "I am a second-year B.Tech student in Computer Science (AI & ML) at KIT's College of Engineering, "

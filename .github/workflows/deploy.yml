@@ -34,7 +34,7 @@ jobs:
         run: |
           OWNER="${{ github.repository_owner }}"
           REPO="${{ github.event.repository.name }}"
-          DOMAIN="${{ vars.CUSTOM_DOMAIN }}"
+          DOMAIN="${{ vars.CUSTOM_DOMAIN || 'adityaaryan.me' }}"
           if [ -n "$DOMAIN" ]; then
             echo "url=https://$DOMAIN" >> "$GITHUB_OUTPUT"; echo "base=" >> "$GITHUB_OUTPUT"
           elif [ "${REPO,,}" = "${OWNER,,}.github.io" ]; then
@@ -48,7 +48,7 @@ jobs:
           DEBUG: "0"
           SITE_URL: ${{ steps.site.outputs.url }}
           BASE_PATH: ${{ steps.site.outputs.base }}
-          CUSTOM_DOMAIN: ${{ vars.CUSTOM_DOMAIN }}
+          CUSTOM_DOMAIN: ${{ vars.CUSTOM_DOMAIN || 'adityaaryan.me' }}
           ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT }}
           ADSENSE_SLOT: ${{ vars.ADSENSE_SLOT }}
           GA_ID: ${{ vars.GA_ID }}
