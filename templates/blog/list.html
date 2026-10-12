@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% load site_tags %}
+{% block content %}
+<div class="page">
+  <div class="crumbs"><a href="{% link 'home' %}">Home</a> / {% if heading %}<a href="{% link 'blog_list' %}">Blog</a> / {{ heading }}{% else %}Blog{% endif %}</div>
+  <h1 class="shimmer">{{ heading|default:"The Blog" }}</h1>
+  <p class="sub">Practical tutorials and honest notes on Django, Flask, open source and cloud, written while learning and building.</p>
+  <div class="blog-tools">
+    <label class="search" role="search"><span aria-hidden="true">🔍</span><input id="q" type="search" placeholder="Search posts…" aria-label="Search posts" autocomplete="off"></label>
+    <div class="cats" aria-label="Categories"><a href="{% link 'blog_list' %}" class="{% if not active_category %}on{% endif %}">All</a>{% for c in categories %}<a href="{% link 'blog_category' c.slug %}" class="{% if active_category == c.slug %}on{% endif %}">{{ c.name }} ({{ c.count }})</a>{% endfor %}</div>
+  </div>
+  <div id="search-results" aria-live="polite"></div>
+  <div class="posts" id="post-grid">{% for p in posts %}{% include "blog/_card.html" %}{% empty %}<p style="color:var(--mist)">No posts yet. Check back soon.</p>{% endfor %}</div>
+  {% if pages > 1 %}<nav class="pager" aria-label="Pagination">{% for n in page_range %}{% if n == page %}<span class="on" aria-current="page">{{ n }}</span>{% elif n == 1 %}<a href="{% link 'blog_list' %}">1</a>{% else %}<a href="{% link 'blog_page' n %}">{{ n }}</a>{% endif %}{% endfor %}</nav>{% endif %}
+</div>
+{% endblock %}
+{% block scripts %}<script>window.SEARCH_INDEX_URL="{% link 'search_index' %}";</script>{% endblock %}

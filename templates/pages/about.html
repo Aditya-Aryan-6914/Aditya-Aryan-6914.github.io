@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% load site_tags %}
+{% block content %}<div class="page narrow">
+  <div class="crumbs"><a href="{% link 'home' %}">Home</a> / About</div>
+  <h1 class="shimmer">About Me</h1>
+  <p class="sub">{{ d.PROFILE.intro }}</p>
+  <div class="prose">
+    {% for para in d.PROFILE.about %}<p>{{ para }}</p>{% endfor %}
+    <h2>Why this blog exists</h2>
+    <p>I started this blog to document what I learn while building real projects: the mistakes, the fixes and the workflows that actually worked. Every article is written by me from hands-on experience, and I update posts when something changes.</p>
+    <h2>Education</h2>
+    <ul>{% for e in d.EDUCATION %}<li><strong>{{ e.degree }}</strong>, {{ e.school }} ({{ e.period }}), {{ e.score }}</li>{% endfor %}</ul>
+    <h2>What I work with</h2>
+    <p>{% for c in d.SKILL_CATEGORIES %}{% if c.id != 'human' %}{% for s in c.skills %}{{ s.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if not forloop.last %}, {% endif %}{% endif %}{% endfor %}.</p>
+    <h2>Get in touch</h2>
+    <p>Questions about a post, a collaboration idea or an open-source project? Use the <a href="{% link 'contact' %}">contact page</a>{% if d.PROFILE.links.github %} or find me on <a href="{{ d.PROFILE.links.github }}" rel="me noopener" target="_blank">GitHub</a>{% endif %}.</p>
+  </div></div>{% endblock %}

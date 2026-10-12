@@ -1,56 +1,68 @@
-# Aditya Aryan — Single Page Portfolio
+# Aditya Aryan — Portfolio + Blog (Django → GitHub Pages)
 
-This is a minimal single-page portfolio. It shows a centered headline and a rotating role/title.
+A cinematic, streaming-style portfolio with a SEO-ready blog. **Django is used as a static site generator**:
+`python manage.py build_static` renders every page to plain HTML in `dist/`, and a GitHub Action publishes it to GitHub Pages.
+(GitHub Pages cannot run Django itself, so there is no database; blog posts are Markdown files.)
 
-Files added:
-- `index.html` — the page markup
-- `styles.css` — simple centered styling and fade animation
-- `script.js` — rotates the words (Student → Explorer → Thinker)
-
-To edit the rotating words or speed:
-
-1. Open `script.js`.
-2. Modify the `roles` array, e.g. `const roles = ["Student","Explorer","Thinker","Maker"]`.
-3. Change `intervalMs` to adjust how long each word is shown (in milliseconds).
-
-Preview locally:
-
+## 1. Run locally
 ```bash
-# from the repo root
-python3 -m http.server 8000
-# then open http://localhost:8000 in your browser
+python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py runserver                              # live preview at http://127.0.0.1:8000
+python manage.py build_static --out dist                # build the static site
+python -m http.server -d dist 8080                      # preview the built output
 ```
 
-Deploy: push to this repository and enable GitHub Pages (branch `main`, folder `/`).
+## 2. Put your details in
+| What | Where |
+| --- | --- |
+| Name, bio, links, **email, LinkedIn**, education, projects, skills, journey | `portfolio/data.py` (anything set to `None` is hidden) |
+| Photo | save as `static/img/portrait.png` (transparent PNG cut-out looks best) or `.webp/.jpg` |
+| Resume PDF | `static/files/Aditya_Aryan_Resume.pdf` (button appears automatically) |
+| Site-wide settings | `config/settings.py` → `SITE`, or GitHub repo **Variables** (below) |
 
-Social links and icons
-- To change the link URLs, open `index.html` and edit the `href` values inside the `.social` block.
-- The icons are inline SVGs — swap or edit the SVG markup if you want different visuals.
+## 3. Write blog posts
+Add a file to `content/posts/my-post.md`:
+```markdown
+---
+title: "Post title"
+date: 2026-10-12            # future dates stay hidden until that day (daily rebuild publishes them)
+category: Django
+tags: [django, python]
+description: "150–160 character summary used for Google results and social cards."
+draft: false
+---
+Your Markdown here. Use ## headings, code fences, tables.
+```
+Push to `main` and the site rebuilds.
 
-Typing animation
-- The typing animation is implemented in `script.js` and is easy to configure.
-- Edit `roles` to change the words, e.g. `const roles = ["Student","Explorer","Maker"]`.
-- Tweak speeds and pauses by editing these constants at the top of `script.js`:
-	- `typingSpeed` — ms per character while typing.
-	- `deletingSpeed` — ms per character while deleting.
-	- `pauseAfterTyping` — ms pause after a full word is typed.
-	- `pauseAfterDeleting` — ms pause after a word is deleted before typing next.
+## 4. Deploy on GitHub Pages
+1. Create a GitHub repo and push this project to the `main` branch.
+2. **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+3. The workflow in `.github/workflows/deploy.yml` builds and deploys. Your URL will be one of:
+   * Repo named `Aditya-Aryan-6914.github.io` → `https://aditya-aryan-6914.github.io/`  *(recommended, no sub-path)*
+   * Any other repo name → `https://aditya-aryan-6914.github.io/<repo>/` *(handled automatically via `BASE_PATH`)*
+   * Custom domain → add repo variable `CUSTOM_DOMAIN` (e.g. `blog.adityaaryan.me`) and point DNS to GitHub Pages.
 
-New pages
-- `about.html` — your about/bio page.
-- `projects.html` — active projects and links.
-- `gallery.html` — photo gallery that reads images from the `Images/` folder.
-- `achievements.html` — awards and milestones.
+### Optional repo variables (Settings → Secrets and variables → Actions → **Variables**)
+| Variable | Purpose |
+| --- | --- |
+| `CUSTOM_DOMAIN` | custom domain (writes `CNAME`, fixes canonical/sitemap URLs) |
+| `ADSENSE_CLIENT` | `ca-pub-XXXXXXXXXXXXXXXX` — adds the AdSense script and generates `ads.txt` |
+| `ADSENSE_SLOT` | optional ad unit id for in-article ads (Auto ads work without it) |
+| `GA_ID` | Google Analytics 4 id (`G-…`), loaded only after cookie consent |
+| `GSC_TOKEN` | Google Search Console verification meta value |
+| `FORMSPREE_ENDPOINT` | contact form endpoint from formspree.io |
 
-Navigation
-- A top navigation bar was added to `index.html` and to each new page; change links or order in those files.
+## 5. SEO checklist (already built in)
+Canonical URLs · Open Graph/Twitter cards · JSON-LD (Person, WebSite, BlogPosting, Breadcrumbs) · `sitemap.xml` · `robots.txt` · RSS `feed.xml` · semantic HTML, one `h1` per page · fast static pages · mobile-first · 404 page.
+After deploying: add the site in **Google Search Console**, submit `/sitemap.xml`, then request indexing for your best posts.
 
-Single-page behavior
-- The site now uses a single-page layout: the home hero stays as the main view.
-- At the bottom of the home page there are inline section links: About Me, Projects, Gallery, Achievements.
-- Clicking any section link scrolls the page to the top, shrinks the hero into a small banner, and fades in the selected section below.
-- Click the banner (your name) or press `Esc` to return to the original home hero view.
-
-
-
-
+## 6. Getting AdSense-approved (honest checklist)
+Approval is decided by Google, so nothing can guarantee it, but these are the usual requirements:
+* **Original, useful content**: aim for 15–25 well-written posts (600+ words, written by you) before applying. Three starter posts are included; replace/extend them.
+* **Required pages** are included: About, Contact, Privacy Policy, Terms, Disclaimer.
+* **Own your domain**: AdSense generally does not approve `*.github.io` subdomains. Buy a domain (e.g. `adityaaryan.me`/`blog.adityaaryan.me`) and set `CUSTOM_DOMAIN`.
+* Clear navigation, no broken links, no copied/AI-spun text, no placeholder "lorem ipsum".
+* Be 18+, have a real name/address for payments, and apply with the domain verified.
+* After approval, set `ADSENSE_CLIENT`; `ads.txt` is generated automatically.

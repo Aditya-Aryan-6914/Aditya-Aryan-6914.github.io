@@ -1,0 +1,4 @@
+{% load site_tags %}<article class="post-card reveal"><a href="{% link 'blog_detail' p.slug %}" style="display:flex;flex-direction:column;height:100%">
+  <div class="art" aria-hidden="true">{{ p.category|slice:":2"|upper }}</div>
+  <div class="pc"><span class="cat-pill">{{ p.category }}</span><h3>{{ p.title }}</h3><p>{{ p.description }}</p>
+    <div class="meta-line" style="margin-top:auto"><time datetime="{{ p.date|date:'Y-m-d' }}">{{ p.date|date:"M j, Y" }}</time><span>·</span><span>{{ p.reading_minutes }} min read</span></div></div></a></article>

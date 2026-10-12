@@ -1,0 +1,137 @@
+{% extends "base.html" %}{% load site_tags %}
+{% block overlays %}
+<div id="opening" class="overlay" role="dialog" aria-label="Opening titles">
+  <div class="bar top"></div><div class="bar bot"></div><div class="glow"></div>
+  <div class="studio">{{ d.PROFILE.original_label }}</div>
+  <div class="o-portrait">{% if PORTRAIT %}<img src="{% asset PORTRAIT %}" alt="Portrait of {{ d.PROFILE.full_name }}">{% else %}<div class="monogram">{{ d.PROFILE.full_name|initials }}</div>{% endif %}</div>
+  <div class="vignette"></div>
+  <div class="o-title"><h1>{{ d.PROFILE.first_name }}</h1><p>{{ d.PROFILE.series_tag }}</p></div>
+  <div class="o-bottom"><p class="o-role">{% for t in d.PROFILE.tagline %}{{ t }}{% if not forloop.last %}  •  {% endif %}{% endfor %}</p>
+    <div class="o-play"><button class="play" id="o-play" type="button"><span>▶</span> PLAY</button></div></div>
+  <button class="skipbtn" id="o-skip" type="button">SKIP INTRO</button>
+</div>
+<div id="profiles" class="overlay" role="dialog" aria-label="Who's watching?">
+  <h2>Who's watching?</h2>
+  <ul class="plist">{% for v in viewer_profiles %}<li><button class="pbtn" type="button" data-profile="{{ v.id }}">
+    <span class="pav" style="background:linear-gradient(145deg,{{ v.color }},#0b0b10 120%)">{{ v.glyph }}{% if forloop.first %}<span class="main-tag">MAIN</span>{% endif %}</span>
+    <span class="nm">{{ v.name }}</span><span class="bl">{{ v.blurb }}</span></button></li>{% endfor %}</ul>
+  <p class="pnote">Every profile watches the same true story of {{ d.PROFILE.full_name }}. It only changes what plays first.</p>
+</div>
+<div id="playintro" class="overlay" role="dialog" aria-label="Highlight reel">
+  <div class="pi-prog" id="pi-prog"></div><button class="pi-close" id="pi-close" type="button" aria-label="Close">✕</button>
+  <div class="vignette"></div><div id="pi-slide"></div>
+  <div class="pi-ctl"><button id="pi-prev" type="button" aria-label="Previous">←</button><button id="pi-pause" type="button" aria-label="Pause">❚❚</button><button id="pi-next" type="button" aria-label="Next">→</button></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="hero" id="top" aria-label="Introduction">
+  <div class="streak" style="top:28%;left:0;width:60%;animation-delay:0s"></div><div class="streak" style="top:52%;left:30%;width:70%;animation-delay:2.5s"></div><div class="streak" style="top:74%;left:5%;width:50%;animation-delay:4.5s"></div>
+  <div class="hero-portrait">{% if PORTRAIT %}<img src="{% asset PORTRAIT %}" alt="Portrait of {{ d.PROFILE.full_name }}" fetchpriority="high">{% else %}<div class="monogram" role="img" aria-label="Initials {{ d.PROFILE.full_name|initials }}">{{ d.PROFILE.full_name|initials }}</div>{% endif %}</div>
+  <div class="hero-copy">
+    <span class="badge">Portfolio · Series</span>
+    <h1 class="shimmer">{{ d.PROFILE.first_name }}</h1>
+    <div class="rolebar">{% for t in d.PROFILE.tagline %}<span>{{ t }}</span>{% endfor %}</div>
+    <p class="lead">{{ d.PROFILE.intro }}</p>
+    <div class="btns">
+      <button class="pill solid" id="play-intro" type="button">▶ Play Intro</button>
+      <a class="pill ghost" href="#originals">ⓘ More Info</a>
+      <a class="pill ghost" href="{% link 'blog_list' %}">Read the Blog</a>
+    </div>
+  </div>
+</section>
+
+<div id="sections">
+  <section class="block" id="about" data-section="about">
+    <div class="sec-head reveal"><div class="eyebrow">The Pilot</div><h2>About Me</h2></div>
+    <div class="grid-2">
+      <div class="about-copy reveal">
+        <p class="serif">{{ d.PROFILE.about.0 }}</p>
+        {% for para in d.PROFILE.about|slice:"1:" %}<p>{{ para }}</p>{% endfor %}
+        <div class="tags">{% for i in d.PROFILE.interests %}<span class="tag">{{ i }}</span>{% endfor %}</div>
+        <div class="stat-row">
+          <div class="stat glass"><b>{{ stats.projects }}</b><small>Originals</small></div>
+          <div class="stat glass"><b>{{ stats.seasons }}</b><small>Seasons</small></div>
+          <div class="stat glass"><b>{{ stats.achievements }}</b><small>Top moments</small></div>
+          <div class="stat glass"><b>{{ stats.posts }}</b><small>Blog posts</small></div>
+        </div>
+      </div>
+      <div class="timeline reveal">
+        {% for e in d.EDUCATION %}<div class="tl glass"><h4>{{ e.degree }}</h4><div class="meta">{{ e.school }}, {{ e.place }} · {{ e.period }}</div><span class="score">{{ e.score }}</span></div>{% endfor %}
+        {% for l in d.LEADERSHIP %}<div class="tl glass" style="border-left-color:#ffb547"><h4>{{ l.role }}</h4><div class="meta">{{ l.org }}{% if l.period %} · {{ l.period }}{% endif %}</div>{% if l.points %}<ul>{% for pt in l.points %}<li>{{ pt }}</li>{% endfor %}</ul>{% endif %}</div>{% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="journey" data-section="journey">
+    <div class="sec-head reveal"><div class="eyebrow">{{ stats.seasons }} Seasons • {{ stats.episodes }} Episodes</div><h2>My Journey</h2><p>Every chapter of the story so far, told as a series.</p></div>
+    <div class="season-tabs" role="tablist">{% for s in seasons %}<button role="tab" type="button" data-season="{{ s.number }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">Season {{ s.number }} · {{ s.title }}</button>{% endfor %}</div>
+    {% for s in seasons %}<div class="season-panel {% if forloop.first %}on{% endif %}" data-panel="{{ s.number }}" role="tabpanel">
+      <p class="season-syn">{{ s.period }} — {{ s.synopsis }}</p>
+      <div class="rail">{% for e in s.episodes %}<article class="ep" style="--from:{{ e.palette.from }};--via:{{ e.palette.via }};--to:{{ e.palette.to }};--accent:{{ e.palette.accent }}">
+        <span class="code">{{ e.code }}</span><h3>{{ e.title }}</h3><p>{{ e.description }}</p><div class="tags">{% for t in e.tags %}<span class="tag">{{ t }}</span>{% endfor %}</div><div class="rt">{{ e.runtime }}</div></article>{% endfor %}</div></div>{% endfor %}
+  </section>
+
+  <section class="block" id="originals" data-section="originals">
+    <div class="sec-head reveal"><div class="eyebrow">{{ stats.projects }} Originals</div><h2>My Projects</h2><p>Tap any poster for the full breakdown.</p></div>
+    <div class="rail">{% for p in projects %}<button class="proj reveal" type="button" data-project="{{ p.id }}" style="--from:{{ p.palette.from }};--via:{{ p.palette.via }};--to:{{ p.palette.to }};--accent:{{ p.palette.accent }}">
+      <svg class="motif" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        {% if p.motif == 'shield' %}<path d="M50 8 18 20v28c0 22 14 38 32 44 18-6 32-22 32-44V20z"/><path d="m36 50 10 10 18-20"/>
+        {% elif p.motif == 'flow' %}<circle cx="20" cy="50" r="9"/><circle cx="50" cy="22" r="9"/><circle cx="80" cy="50" r="9"/><circle cx="50" cy="78" r="9"/><path d="M28 44 42 28M58 28l14 16M72 58 58 72M42 72 28 58"/>
+        {% else %}<rect x="12" y="14" width="34" height="34" rx="6"/><rect x="54" y="14" width="34" height="34" rx="6"/><rect x="12" y="56" width="34" height="30" rx="6"/><rect x="54" y="56" width="34" height="30" rx="6"/>{% endif %}</svg>
+      <span class="yr">{{ p.year }}</span><h3>{{ p.title }}</h3><span class="gn">{{ p.genre }}</span><p class="ll">{{ p.logline }}</p><span class="open">▶ VIEW DETAILS</span></button>{% endfor %}</div>
+  </section>
+
+  <section class="block" id="picks" data-section="picks">
+    <div class="sec-head reveal"><div class="eyebrow">Trending now</div><h2>Top 10 Picks</h2></div>
+    <div class="picks">{% for t in picks %}<div class="pick reveal"><div class="card" style="--from:{{ t.palette.from }};--via:{{ t.palette.via }};--to:{{ t.palette.to }};--accent:{{ t.palette.accent }}"><small>{{ t.label }}</small><b>{{ t.title }}</b><span>{{ t.detail }}</span></div></div>{% endfor %}</div>
+  </section>
+
+  <section class="block" id="skills" data-section="skills">
+    <div class="sec-head reveal"><div class="eyebrow">{{ skills|length }} Categories</div><h2>My Skills</h2><p>Browse by genre. Tap a skill to see where it shows up.</p></div>
+    <div class="genres">{% for c in skills %}<div class="genre glass reveal"><h3>{{ c.title }}</h3><small>{{ c.subtitle }}</small>
+      <div class="skills">{% for s in c.skills %}<button class="skill" type="button" data-skill="{{ s.name }}" aria-expanded="false"><span class="mono">{{ s.mono }}</span><span><b>{{ s.name }}</b>{% if s.note %}<i>{{ s.note }}</i>{% endif %}</span></button>{% endfor %}</div>
+      <div class="evidence" aria-live="polite"></div></div>{% endfor %}</div>
+  </section>
+
+  <section class="block" id="moments" data-section="moments">
+    <div class="sec-head reveal"><div class="eyebrow">{{ achievements|length }} Moments • {{ d.CERTIFICATIONS|length }} Certifications</div><h2>My Achievements</h2></div>
+    <div class="awards">{% for a in achievements %}<article class="award reveal" style="--from:{{ a.palette.from }};--via:{{ a.palette.via }};--to:{{ a.palette.to }};--accent:{{ a.palette.accent }}"><small>{{ a.org }}</small><h3>{{ a.title }}</h3><p>{{ a.detail }}</p></article>{% endfor %}</div>
+    <div class="certs">{% for c in d.CERTIFICATIONS %}<div class="cert glass reveal"><small>{{ c.issuer }}</small><b>{% if c.link %}<a href="{{ c.link }}" target="_blank" rel="noopener">{{ c.name }} ↗</a>{% else %}{{ c.name }}{% endif %}</b></div>{% endfor %}</div>
+  </section>
+
+  <section class="block" id="blog" data-section="blog">
+    <div class="sec-head reveal"><div class="eyebrow">New episodes</div><h2>From the Blog</h2><p>Tutorials and notes on Django, Flask, open source and cloud.</p></div>
+    <div class="posts home">{% for p in latest_posts %}{% include "blog/_card.html" %}{% endfor %}</div>
+    <div class="sec-head" style="margin-top:22px"><a class="pill ghost" href="{% link 'blog_list' %}">Browse all posts →</a></div>
+  </section>
+
+  <section class="block" id="story" data-section="story">
+    <div class="sec-head reveal"><div class="eyebrow">Resume • View &amp; download</div><h2>The Full Story</h2></div>
+    <div class="resume glass reveal">
+      <div><h3>Education</h3>{% for e in d.EDUCATION %}<div class="it"><b>{{ e.degree }}</b><span>{{ e.school }} · {{ e.period }} · {{ e.score }}</span></div>{% endfor %}
+        <h3 style="margin-top:22px">Leadership</h3>{% for l in d.LEADERSHIP %}<div class="it"><b>{{ l.role }}</b><span>{{ l.org }}{% if l.period %} · {{ l.period }}{% endif %}</span></div>{% endfor %}</div>
+      <div><h3>Projects</h3>{% for p in projects %}<div class="it"><b>{{ p.title }}</b><span>{{ p.logline }}</span></div>{% endfor %}
+        <h3 style="margin-top:22px">Skills</h3><div class="tags">{% for c in skills %}{% for s in c.skills %}<span class="tag">{{ s.name }}</span>{% endfor %}{% endfor %}</div></div>
+      <div class="acts">{% if RESUME_URL %}<a class="pill solid" href="{% asset RESUME_URL %}" download>⬇ Download Resume (PDF)</a>{% endif %}<button class="pill ghost" type="button" onclick="window.print()">Print this page</button></div>
+    </div>
+  </section>
+</div>
+
+<section class="cta" id="contact-cta">
+  <h2 class="outline">TO BE CONTINUED…</h2>
+  <p>Have a project, an internship, or an open-source idea? Let's make the next episode together.</p>
+  <div class="btns">
+    <a class="pill red" href="{% link 'contact' %}">Get in touch</a>
+    {% if d.PROFILE.links.github %}<a class="pill ghost" href="{{ d.PROFILE.links.github }}" target="_blank" rel="noopener">GitHub</a>{% endif %}
+    {% if d.PROFILE.links.linkedin %}<a class="pill ghost" href="{{ d.PROFILE.links.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>{% endif %}
+    {% if d.PROFILE.email %}<a class="pill ghost" href="mailto:{{ d.PROFILE.email }}">Email</a>{% endif %}
+  </div>
+</section>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Project details"><div class="sheet" id="sheet"></div></div>
+{{ projects_data|json_script:"projects-data" }}
+{{ viewer_profiles|json_script:"profiles-data" }}
+{{ intro_slides|json_script:"intro-data" }}
+{{ evidence|json_script:"evidence-data" }}
+{% endblock %}

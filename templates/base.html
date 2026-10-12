@@ -1,0 +1,80 @@
+{% load site_tags %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% if title %}{{ title }}{% if not is_home %} | {{ SITE.name }}{% endif %}{% else %}{{ SITE.name }}{% endif %}</title>
+  <meta name="description" content="{{ description|default:PROFILE.intro }}">
+  <meta name="theme-color" content="#07070a">
+  <meta name="author" content="{{ SITE.name }}">
+  {% if noindex %}<meta name="robots" content="noindex, follow">{% else %}<meta name="robots" content="index, follow, max-image-preview:large">{% endif %}
+  {% if CANONICAL %}<link rel="canonical" href="{{ CANONICAL }}">{% endif %}
+  <link rel="alternate" type="application/rss+xml" title="{{ SITE.name }} — Blog" href="{% link 'feed' %}">
+  <link rel="icon" type="image/svg+xml" href="{% asset 'img/favicon.svg' %}">
+  {% if SITE.search_console_token %}<meta name="google-site-verification" content="{{ SITE.search_console_token }}">{% endif %}
+  <meta property="og:site_name" content="{{ SITE.name }}">
+  <meta property="og:type" content="{{ og_type|default:'website' }}">
+  <meta property="og:title" content="{{ title|default:SITE.name }}">
+  <meta property="og:description" content="{{ description|default:PROFILE.intro }}">
+  <meta property="og:url" content="{{ CANONICAL }}">
+  <meta property="og:image" content="{{ OG_IMAGE }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% asset 'css/style.css' %}">
+  <script>(function(d){d.classList.add('js');try{if(sessionStorage.getItem('seen')||location.hash||/bot|crawl|spider|lighthouse|headless/i.test(navigator.userAgent))d.classList.add('seen')}catch(e){}})(document.documentElement)</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[
+    {"@type":"Person","name":"{{ PROFILE.full_name }}","url":"{{ SITE.url }}/","jobTitle":"{{ PROFILE.role }}","sameAs":[{% if PROFILE.links.github %}"{{ PROFILE.links.github }}"{% endif %}{% if PROFILE.links.linkedin %},"{{ PROFILE.links.linkedin }}"{% endif %}]},
+    {"@type":"WebSite","name":"{{ SITE.name }}","url":"{{ SITE.url }}/"}]}</script>
+  {% if jsonld %}<script type="application/ld+json">{{ jsonld|safe }}</script>{% endif %}
+  {% if SITE.adsense_client %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ SITE.adsense_client }}" crossorigin="anonymous"></script>{% endif %}
+  {% block head %}{% endblock %}
+</head>
+<body data-ga="{{ SITE.ga_id }}">
+<a class="skip" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+<div id="cursor" aria-hidden="true"></div>
+{% block overlays %}{% endblock %}
+
+<header class="nav" id="nav">
+  <a class="brand" href="{% link 'home' %}" aria-label="{{ SITE.name }} home">{{ PROFILE.first_name }}</a>
+  <nav aria-label="Primary"><ul>
+    <li><a href="{% link 'home' %}#about">About</a></li>
+    <li><a href="{% link 'home' %}#originals">Projects</a></li>
+    <li><a href="{% link 'home' %}#skills">Skills</a></li>
+    <li><a href="{% link 'blog_list' %}" {% if nav == 'blog' %}aria-current="page"{% endif %}>Blog</a></li>
+    <li><a href="{% link 'contact' %}">Contact</a></li>
+  </ul></nav>
+  <div class="nav-right">
+    {% if is_home %}<button class="switch" id="switch" type="button" aria-label="Switch viewer profile"><span class="av" id="switch-av">A</span><span class="lbl" id="switch-name">Aditya</span></button>{% endif %}
+    {% if RESUME_URL %}<a class="pill solid" href="{% asset RESUME_URL %}" download>Resume</a>{% endif %}
+    <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+<div class="drawer" id="drawer" role="dialog" aria-label="Menu">
+  <button class="x" id="drawer-x" type="button" aria-label="Close menu">✕</button>
+  <a href="{% link 'home' %}">Home</a><a href="{% link 'home' %}#about">About</a><a href="{% link 'home' %}#originals">Projects</a>
+  <a href="{% link 'home' %}#skills">Skills</a><a href="{% link 'blog_list' %}">Blog</a><a href="{% link 'contact' %}">Contact</a>
+</div>
+
+<main id="main">{% block content %}{% endblock %}</main>
+
+<footer class="foot">
+  <div class="foot-grid">
+    <div><a class="brand" href="{% link 'home' %}" style="display:inline-block">{{ PROFILE.first_name }}</a>
+      <p style="color:var(--mist);font-size:.88rem;max-width:22rem">{{ PROFILE.role }} · B.Tech CSE (AI &amp; ML) · IIT Madras BS Data Science. Writing about Django, Flask, open source and cloud.</p></div>
+    <div><h4>Explore</h4><a href="{% link 'home' %}#originals">Projects</a><a href="{% link 'blog_list' %}">Blog</a><a href="{% link 'about' %}">About</a><a href="{% link 'contact' %}">Contact</a></div>
+    <div><h4>Legal</h4><a href="{% link 'privacy' %}">Privacy Policy</a><a href="{% link 'terms' %}">Terms of Use</a><a href="{% link 'disclaimer' %}">Disclaimer</a></div>
+    <div><h4>Follow</h4>{% if PROFILE.links.github %}<a href="{{ PROFILE.links.github }}" rel="me noopener" target="_blank">GitHub</a>{% endif %}{% if PROFILE.links.linkedin %}<a href="{{ PROFILE.links.linkedin }}" rel="me noopener" target="_blank">LinkedIn</a>{% endif %}<a href="{% link 'feed' %}">RSS feed</a><a href="{% link 'sitemap' %}">Sitemap</a></div>
+  </div>
+  <div class="fine"><span>© {% now "Y" %} {{ SITE.name }}. All rights reserved.</span><span>A personal portfolio with a streaming-inspired look. Not affiliated with any streaming service.</span></div>
+</footer>
+
+<div id="consent" role="dialog" aria-label="Cookie consent">
+  <p>This site uses cookies for analytics and to show ads (Google AdSense). See the <a href="{% link 'privacy' %}">Privacy Policy</a>.</p>
+  <button class="pill solid" id="consent-yes" type="button">Accept</button><button class="pill ghost" id="consent-no" type="button">Decline</button>
+</div>
+<script src="{% asset 'js/main.js' %}" defer></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

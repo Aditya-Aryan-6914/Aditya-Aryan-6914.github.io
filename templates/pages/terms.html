@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% load site_tags %}
+{% block content %}<div class="page narrow"><div class="crumbs"><a href="{% link 'home' %}">Home</a> / Terms</div>
+<h1>Terms of Use</h1><div class="prose">
+<p>By using this Site you agree to these terms.</p>
+<h2>Content and copyright</h2><p>Unless stated otherwise, the articles, design and code samples on this Site are © {% now "Y" %} {{ PROFILE.full_name }}. You may quote short excerpts with a link back to the original post. Please do not republish full articles without permission. Code snippets in tutorials may be used freely in your own projects.</p>
+<h2>No warranty</h2><p>Content is provided "as is" for educational purposes. I make reasonable efforts to keep it accurate but cannot guarantee it is complete or current.</p>
+<h2>Limitation of liability</h2><p>I am not liable for any loss or damage arising from the use of this Site or from following any tutorial on it.</p>
+<h2>External links</h2><p>Links to third-party sites are provided for convenience and do not imply endorsement.</p>
+<h2>Contact</h2><p>Questions about these terms? Use the <a href="{% link 'contact' %}">contact page</a>.</p></div></div>{% endblock %}

@@ -1,0 +1,72 @@
+name: Build & deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "30 0 * * *"      # daily rebuild so posts with a future date go live automatically
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Work out site URL
+        id: site
+        run: |
+          OWNER="${{ github.repository_owner }}"
+          REPO="${{ github.event.repository.name }}"
+          DOMAIN="${{ vars.CUSTOM_DOMAIN }}"
+          if [ -n "$DOMAIN" ]; then
+            echo "url=https://$DOMAIN" >> "$GITHUB_OUTPUT"; echo "base=" >> "$GITHUB_OUTPUT"
+          elif [ "${REPO,,}" = "${OWNER,,}.github.io" ]; then
+            echo "url=https://${OWNER,,}.github.io" >> "$GITHUB_OUTPUT"; echo "base=" >> "$GITHUB_OUTPUT"
+          else
+            echo "url=https://${OWNER,,}.github.io/$REPO" >> "$GITHUB_OUTPUT"; echo "base=/$REPO" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build static site
+        env:
+          DEBUG: "0"
+          SITE_URL: ${{ steps.site.outputs.url }}
+          BASE_PATH: ${{ steps.site.outputs.base }}
+          CUSTOM_DOMAIN: ${{ vars.CUSTOM_DOMAIN }}
+          ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT }}
+          ADSENSE_SLOT: ${{ vars.ADSENSE_SLOT }}
+          GA_ID: ${{ vars.GA_ID }}
+          GSC_TOKEN: ${{ vars.GSC_TOKEN }}
+          FORMSPREE_ENDPOINT: ${{ vars.FORMSPREE_ENDPOINT }}
+        run: python manage.py build_static --out dist
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

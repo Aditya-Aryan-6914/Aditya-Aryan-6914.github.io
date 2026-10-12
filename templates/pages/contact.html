@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% load site_tags %}
+{% block content %}<div class="page narrow">
+  <div class="crumbs"><a href="{% link 'home' %}">Home</a> / Contact</div>
+  <h1 class="shimmer">Contact</h1>
+  <p class="sub">Questions, feedback, collaboration or a correction on a post? Send a message and I'll reply as soon as I can.</p>
+  {% if SITE.formspree_endpoint %}
+  <form class="form" id="contact-form" action="{{ SITE.formspree_endpoint }}" method="POST">
+    <label>Your name<input name="name" required maxlength="80" autocomplete="name"></label>
+    <label>Email<input type="email" name="email" required autocomplete="email"></label>
+    <label>Message<textarea name="message" rows="6" required minlength="10"></textarea></label>
+    <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="pill red" type="submit" style="justify-self:start">Send message</button>
+    <p id="form-status" class="notice ok" style="display:none" role="status"></p>
+  </form>
+  {% else %}
+  <p class="notice">The contact form is not connected yet. Reach out via the links below{% if not PROFILE.email %}.{% endif %}</p>
+  {% endif %}
+  <div class="prose" style="margin-top:30px"><h2>Other ways to reach me</h2><ul>
+    {% if PROFILE.email %}<li>Email: <a href="mailto:{{ PROFILE.email }}">{{ PROFILE.email }}</a></li>{% endif %}
+    {% if PROFILE.links.github %}<li>GitHub: <a href="{{ PROFILE.links.github }}" rel="me noopener" target="_blank">{{ PROFILE.links.github }}</a></li>{% endif %}
+    {% if PROFILE.links.linkedin %}<li>LinkedIn: <a href="{{ PROFILE.links.linkedin }}" rel="me noopener" target="_blank">Profile</a></li>{% endif %}
+    <li>Based in {{ PROFILE.location }}</li></ul></div>
+</div>{% endblock %}

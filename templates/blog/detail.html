@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% load site_tags %}
+{% block content %}
+<div class="page"><article class="article">
+  <div class="crumbs"><a href="{% link 'home' %}">Home</a> / <a href="{% link 'blog_list' %}">Blog</a> / <a href="{% link 'blog_category' post.category_slug %}">{{ post.category }}</a></div>
+  <span class="cat-pill">{{ post.category }}</span>
+  <h1>{{ post.title }}</h1>
+  <div class="byline"><span class="av" aria-hidden="true">{{ PROFILE.full_name|initials }}</span>
+    <span>By <strong style="color:var(--bone)">{{ PROFILE.full_name }}</strong><br><time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"F j, Y" }}</time>{% if post.updated != post.date %} · Updated <time datetime="{{ post.updated|date:'Y-m-d' }}">{{ post.updated|date:"F j, Y" }}</time>{% endif %} · {{ post.reading_minutes }} min read</span></div>
+  {% if post.toc|length > 2 %}<nav class="toc glass" aria-label="Table of contents"><b>In this article</b><ol>{% for t in post.toc %}<li><a href="#{{ t.id }}">{{ t.name }}</a></li>{% endfor %}</ol></nav>{% endif %}
+  {% include "blog/_ad.html" %}
+  <div class="prose">{{ post.html|safe }}</div>
+  {% include "blog/_ad.html" %}
+  {% if post.tags %}<div class="tags" style="margin-top:28px">{% for t in post.tags %}<span class="tag">#{{ t }}</span>{% endfor %}</div>{% endif %}
+  <aside class="authorbox glass"><span class="av pav" style="width:56px;height:56px;font-size:1.5rem;flex:none;background:linear-gradient(145deg,#7a0f24,#1a0509)">{{ PROFILE.full_name|initials }}</span>
+    <div><strong>{{ PROFILE.full_name }}</strong><p>{{ PROFILE.role }}. B.Tech CSE (AI &amp; ML) student at KIT's College of Engineering, Kolhapur, and IIT Madras BS Data Science scholar. I write about what I build and learn. <a href="{% link 'about' %}" style="text-decoration:underline">More about me</a>.</p></div></aside>
+  <nav class="prevnext" aria-label="More posts">{% if newer %}<a href="{% link 'blog_detail' newer.slug %}"><small>← Newer</small>{{ newer.title }}</a>{% else %}<span></span>{% endif %}{% if older %}<a class="r" href="{% link 'blog_detail' older.slug %}"><small>Older →</small>{{ older.title }}</a>{% endif %}</nav>
+</article>
+{% if related %}<h2 style="font-family:var(--display);font-weight:400;font-size:2.4rem;margin:50px 0 16px">Keep reading</h2><div class="posts">{% for p in related %}{% include "blog/_card.html" %}{% endfor %}</div>{% endif %}
+</div>
+{% endblock %}
