@@ -17,7 +17,7 @@ PROFILE = {
     "full_name": "Aditya Aryan",
     "first_name": "ADITYA",
     "series_tag": "THE SERIES",
-    "original_label": "AN ARYAN ORIGINAL",
+    "original_label": "ADITYA ARYAN ORIGINAL",
     "role": "Full Stack Developer",
     "tagline": ["Full Stack Developer", "AI / ML Engineer", "Cloud Engineer"],
     "intro": (
@@ -26,11 +26,11 @@ PROFILE = {
         "open source, and is heading into cloud-native engineering."
     ),
     "location": "Kolhapur, Maharashtra",
-    "email": None,                      # e.g. "you@example.com"  (hidden while None)
-    "phone": None,
+    "email": "aryanaditya275@gmail.com",
+    "phone": "+91 7542997803",
     "links": {
         "github": "https://github.com/Aditya-Aryan-6914",
-        "linkedin": None,               # e.g. "https://www.linkedin.com/in/your-handle/"
+        "linkedin": "https://www.linkedin.com/in/aditya-aryan6914/",               # e.g. "https://www.linkedin.com/in/your-handle/"
         "website": "https://adityaaryan.me",
     },
     "resume_pdf": "files/Aditya_Aryan_Resume.pdf",   # put the PDF in static/files/ to enable the button
